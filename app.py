@@ -14,7 +14,7 @@ def about():
 def user(name):
     return f"Olá {name}"
 
-    from markupsafe import escape
+from markupsafe import escape
 
 @app.route("/escape/<name>")
 def escape_name(name):
@@ -31,3 +31,11 @@ from flask import render_template
 @app.route("/home")
 def home():
     return render_template("index.html", name="Vitória")
+
+from flask import request
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        return f"Usuário {request.form['username']}"
+    return "Envie um POST"
