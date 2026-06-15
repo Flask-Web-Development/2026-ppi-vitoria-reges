@@ -25,3 +25,9 @@ from flask import url_for
 @app.route("/static-test")
 def static_test():
     return url_for("static", filename="style.css")
+
+from flask import render_template
+
+@app.route("/home")
+def home():
+    return render_template("index.html", name="Vitória")
