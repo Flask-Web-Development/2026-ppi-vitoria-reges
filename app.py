@@ -19,3 +19,9 @@ def user(name):
 @app.route("/escape/<name>")
 def escape_name(name):
     return f"Olá {escape(name)}"
+
+from flask import url_for
+
+@app.route("/static-test")
+def static_test():
+    return url_for("static", filename="style.css")
