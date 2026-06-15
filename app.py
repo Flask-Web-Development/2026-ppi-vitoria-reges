@@ -42,3 +42,12 @@ def go():
 @app.route("/erro")
 def erro():
     abort(404)
+
+from flask import session
+
+app.secret_key = "chave-secreta"
+
+@app.route("/set")
+def set_session():
+    session["user"] = "FlaskUser"
+    return "Sessão criada"
