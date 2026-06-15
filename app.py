@@ -13,3 +13,9 @@ def about():
 @app.route("/user/<name>")
 def user(name):
     return f"Olá {name}"
+
+    from markupsafe import escape
+
+@app.route("/escape/<name>")
+def escape_name(name):
+    return f"Olá {escape(name)}"
