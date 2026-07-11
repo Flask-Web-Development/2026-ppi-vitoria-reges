@@ -26,74 +26,85 @@ def index():
 def create():
     if request.method == 'POST':
         title = request.form['title']
-        body = request.form['body']
+        book_author = request.form['book_author']
+        review = request.form['review']
         error = None
 
         if not title:
             error = 'Title is required.'
+        elif not book_author:
+            error = 'Author is required.'
+        elif not review:
+            error = 'Review is required.'
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO book (title, book_author, review, owner_id)'
+                ' VALUES (?, ?, ?, ?)',
+                (title, book_author, review, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('books.index'))
 
-    return render_template('blog/create.html')
+    return render_template('books/create.html')
 
-def get_post(id, check_author=True):
-    post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
+def get_book(id, check_author=True):
+    book = get_db().execute(
+        'SELECT b.id, title, book_author, review, created, owner_id, username'
+        ' FROM book b JOIN user u ON b.owner_id = u.id'
+        ' WHERE b.id = ?',
         (id,)
     ).fetchone()
 
-    if post is None:
-        abort(404, f"Post id {id} doesn't exist.")
+    if book is None:
+        abort(404, f"Book id {id} doesn't exist.")
 
-    if check_author and post['author_id'] != g.user['id']:
+    if check_author and book['owner_id'] != g.user['id']:
         abort(403)
 
-    return post
+    return book
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-    post = get_post(id)
+    book = get_book(id)
 
     if request.method == 'POST':
         title = request.form['title']
-        body = request.form['body']
+        book_author = request.form['book_author']
+        review = request.form['review']
         error = None
 
         if not title:
             error = 'Title is required.'
+        elif not book_author:
+            error = 'Author is required.'
+        elif not review:
+            error = 'Review is required.'
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                'UPDATE post SET title = ?, body = ?'
+                'UPDATE book'
+                ' SET title = ?, book_author = ?, review = ?'
                 ' WHERE id = ?',
-                (title, body, id)
+                (title, book_author, review, id)
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('books.index'))
 
-    return render_template('blog/update.html', post=post)
+    return render_template('books/update.html', book=book)
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_post(id)
+    get_book(id)
     db = get_db()
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.execute('DELETE FROM book WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('books.index'))
