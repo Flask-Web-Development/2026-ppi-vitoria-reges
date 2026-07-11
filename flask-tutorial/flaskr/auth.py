@@ -23,9 +23,9 @@ def register():
         error = None
 
         if not username:
-            error = "Username é obrigatório."
+            error = "Username is required."
         elif not password:
-            error = "Senha é obrigatória."
+            error = "Password is required."
 
         if error is None:
             try:
