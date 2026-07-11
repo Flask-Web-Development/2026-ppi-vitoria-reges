@@ -31,8 +31,8 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     def create_app():
-    app = ...
-    # existing code omitted
+        app = ...
+    
 
     from . import blog
     app.register_blueprint(blog.bp)
