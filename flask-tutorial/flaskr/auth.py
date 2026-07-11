@@ -60,9 +60,9 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = "User not found."
+            error = "Incorrect username."
         elif not check_password_hash(user["password"], password):
-            error = "Senha incorreta."
+            error = "Incorrect password."
 
         if error is None:
             session.clear()

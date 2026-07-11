@@ -35,9 +35,9 @@ def init_db():
 
 @click.command("init-db")
 def init_db_command():
-    """Cria as tabelas do banco do zero"""
+    """Clear the existing data and create new tables."""
     init_db()
-    click.echo("Banco de dados inicializado com sucesso.")
+    click.echo("Initialized the database.")
 
 
 
