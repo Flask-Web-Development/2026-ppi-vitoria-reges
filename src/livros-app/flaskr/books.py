@@ -8,3 +8,15 @@ from flaskr.db import get_db
 
 
 bp = Blueprint('books', __name__)
+
+@bp.route('/')
+def index():
+    db = get_db()
+
+    books = db.execute(
+        'SELECT b.id, title, book_author, review, created, owner_id, username'
+        ' FROM book b JOIN user u ON b.owner_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+
+    return render_template('books/index.html', books=books)
