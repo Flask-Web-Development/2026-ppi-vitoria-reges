@@ -36,7 +36,7 @@ def register():
                 )
                 db.commit()
             except sqlite3.IntegrityError:
-                error = f"User {username} already exists."
+                error = f"User {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
 
@@ -60,7 +60,7 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = "Usuário não encontrado."
+            error = "User not found."
         elif not check_password_hash(user["password"], password):
             error = "Senha incorreta."
 
