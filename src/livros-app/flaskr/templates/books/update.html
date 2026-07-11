@@ -1,35 +1,29 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Books{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('books.create') }}">New</a>
-  {% endif %}
+  <h1>{% block title %}Edit "{{ book['title'] }}"{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  {% for book in books %}
-    <article class="book">
-      <header>
-        <div>
-          <h1>{{ book['title'] }}</h1>
-          <div class="about">
-            by {{ book['book_author'] }}
-            — added by {{ book['username'] }}
-            on {{ book['created'].strftime('%Y-%m-%d') }}
-          </div>
-        </div>
+  <form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title"
+      value="{{ request.form['title'] or book['title'] }}" required>
 
-        {% if g.user['id'] == book['owner_id'] %}
-          <a class="action" href="{{ url_for('books.update', id=book['id']) }}">Edit</a>
-        {% endif %}
-      </header>
+    <label for="book_author">Author</label>
+    <input name="book_author" id="book_author"
+      value="{{ request.form['book_author'] or book['book_author'] }}" required>
 
-      <p class="body">{{ book['review'] }}</p>
-    </article>
+    <label for="review">Review</label>
+    <textarea name="review" id="review">{{ request.form['review'] or book['review'] }}</textarea>
 
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+    <input type="submit" value="Save">
+  </form>
+
+  <hr>
+
+  <form action="{{ url_for('books.delete', id=book['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete"
+      onclick="return confirm('Are you sure?');">
+  </form>
 {% endblock %}
