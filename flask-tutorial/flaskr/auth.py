@@ -1,4 +1,5 @@
 import functools
+import sqlite3
 
 from flask import (
     Blueprint, flash, g, redirect, render_template,
@@ -34,8 +35,8 @@ def register():
                     (username, generate_password_hash(password)),
                 )
                 db.commit()
-            except db.IntegrityError:
-                error = f"Usuário {username} já existe."
+            except sqlite3.IntegrityError:
+                error = f"User {username} already exists."
             else:
                 return redirect(url_for("auth.login"))
 
