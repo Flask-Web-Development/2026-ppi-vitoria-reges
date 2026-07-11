@@ -17,15 +17,7 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
-    
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-    @app.route("/")
-    def index():
-        return "Página inicial"
+    os.makedirs(app.instance_path, exist_ok=True)
 
 
     @app.route('/hello')
