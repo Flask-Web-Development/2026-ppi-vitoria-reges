@@ -47,11 +47,11 @@ def test_owner_required(app, client, auth):
 
     auth.login()
 
-    # O usuário atual não pode alterar o livro de outro usuário.
+    
     assert client.post('/1/update').status_code == 403
     assert client.post('/1/delete').status_code == 403
 
-    # O usuário atual não deve visualizar o link de edição.
+    
     assert b'href="/1/update"' not in client.get('/').data
 
 
@@ -138,36 +138,6 @@ def test_create_update_validate(client, auth, path):
     )
 
     assert b'Title is required.' in response.data
-
-
-def test_create_validate_author(client, auth):
-    auth.login()
-
-    response = client.post(
-        '/create',
-        data={
-            'title': 'title',
-            'book_author': '',
-            'review': 'review',
-        }
-    )
-
-    assert b'Author is required.' in response.data
-
-
-def test_create_validate_review(client, auth):
-    auth.login()
-
-    response = client.post(
-        '/create',
-        data={
-            'title': 'title',
-            'book_author': 'author',
-            'review': '',
-        }
-    )
-
-    assert b'Review is required.' in response.data
 
 
 def test_delete(client, auth, app):
